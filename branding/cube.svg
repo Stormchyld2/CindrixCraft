@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="CindrixCraft voxel cube mark">
+<title>CindrixCraft voxel cube mark</title>
+<g stroke="#14110F" stroke-width="1.4" stroke-linejoin="round">
+<polygon points="169.3,140 146.2,153.3 146.2,126.7 169.3,113.3" fill="#8F2F12"/>
+<polygon points="30.7,140 53.8,153.3 53.8,126.7 30.7,113.3" fill="#D9501F"/>
+<polygon points="100,20 123.1,33.3 100,46.7 76.9,33.3" fill="#F2A541"/>
+<polygon points="146.2,153.3 123.1,166.7 123.1,140 146.2,126.7" fill="#8F2F12"/>
+<polygon points="169.3,113.3 146.2,126.7 146.2,100 169.3,86.7" fill="#8F2F12"/>
+<polygon points="53.8,153.3 76.9,166.7 76.9,140 53.8,126.7" fill="#D9501F"/>
+<polygon points="30.7,113.3 53.8,126.7 53.8,100 30.7,86.7" fill="#D9501F"/>
+<polygon points="76.9,33.3 100,46.7 76.9,60 53.8,46.7" fill="#F2A541"/>
+<polygon points="123.1,33.3 146.2,46.7 123.1,60 100,46.7" fill="#F2A541"/>
+<polygon points="100,126.7 123.1,140 100,153.3 76.9,140" fill="#FFE3B0"/>
+<polygon points="76.9,166.7 100,180 100,153.3 76.9,140" fill="#D9501F"/>
+<polygon points="123.1,166.7 100,180 100,153.3 123.1,140" fill="#8F2F12"/>
+<polygon points="123.1,86.7 146.2,100 123.1,113.3 100,100" fill="#FFE3B0"/>
+<polygon points="100,126.7 123.1,140 123.1,113.3 100,100" fill="#FF8F45"/>
+<polygon points="146.2,126.7 123.1,140 123.1,113.3 146.2,100" fill="#8F2F12"/>
+<polygon points="76.9,86.7 100,100 76.9,113.3 53.8,100" fill="#FFE3B0"/>
+<polygon points="53.8,126.7 76.9,140 76.9,113.3 53.8,100" fill="#D9501F"/>
+<polygon points="100,126.7 76.9,140 76.9,113.3 100,100" fill="#C2451A"/>
+<polygon points="146.2,46.7 169.3,60 146.2,73.3 123.1,60" fill="#F2A541"/>
+<polygon points="123.1,86.7 146.2,100 146.2,73.3 123.1,60" fill="#FF8F45"/>
+<polygon points="169.3,86.7 146.2,100 146.2,73.3 169.3,60" fill="#8F2F12"/>
+<polygon points="100,46.7 123.1,60 100,73.3 76.9,60" fill="#F2A541"/>
+<polygon points="76.9,86.7 100,100 100,73.3 76.9,60" fill="#FF8F45"/>
+<polygon points="123.1,86.7 100,100 100,73.3 123.1,60" fill="#C2451A"/>
+<polygon points="53.8,46.7 76.9,60 53.8,73.3 30.7,60" fill="#F2A541"/>
+<polygon points="30.7,86.7 53.8,100 53.8,73.3 30.7,60" fill="#D9501F"/>
+<polygon points="76.9,86.7 53.8,100 53.8,73.3 76.9,60" fill="#C2451A"/>
+</g>
+</svg>
