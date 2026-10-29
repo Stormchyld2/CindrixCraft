@@ -4,7 +4,7 @@ Everything bundled with or derived into CindrixCraft is listed here with its sou
 
 | Name | Type | Source | License |
 | --- | --- | --- | --- |
-| Luanti | Engine | https://www.luanti.org/ | LGPL |
+| Luanti | Engine (source copy in `engine/luanti`, tag 5.17.0) | https://github.com/luanti-org/luanti | LGPL-2.1+ (see `engine/luanti/LICENSE.txt`; bundled textures and sounds have their own licenses listed there) |
 | Mineclonia | Base game | https://content.luanti.org/packages/ryvnf/mineclonia | Code GPLv3 or later, media CC BY-SA 4.0 (per the project's own page: https://mineclonia.codeberg.page/wiki/meta/mineclonia.html) |
 | Barlow Condensed | Typeface (logo lettering; font files not bundled yet) | https://fonts.google.com/specimen/Barlow+Condensed | SIL Open Font License 1.1, from memory; confirm before bundling the font files |
 
