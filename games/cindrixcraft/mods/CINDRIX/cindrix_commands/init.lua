@@ -452,4 +452,323 @@ core.register_chatcommand("who", {
 	end,
 })
 
+--------------------------------------------------------------------------------
+-- /feed (same as /eat) and /repair
+--------------------------------------------------------------------------------
+
+core.register_chatcommand("feed", {
+	description = "Fill your hunger bar (same as /eat)",
+	privs = PRIV,
+	func = core.registered_chatcommands["eat"].func,
+})
+
+core.register_chatcommand("repair", {
+	description = "Repair the item in your hand",
+	privs = PRIV,
+	func = function(name)
+		local player = find_player(name)
+		if not player then return false, "Player not found." end
+		local stack = player:get_wielded_item()
+		if stack:is_empty() then
+			return false, "Hold the item you want to repair."
+		end
+		if stack:get_wear() == 0 then
+			return false, "That item is not damaged."
+		end
+		stack:set_wear(0)
+		player:set_wielded_item(stack)
+		return true, "Repaired."
+	end,
+})
+
+--------------------------------------------------------------------------------
+-- /tp and /tphere
+--------------------------------------------------------------------------------
+
+local function parse_pos(a, b, c)
+	local x, y, z = tonumber(a), tonumber(b), tonumber(c)
+	if x and y and z then
+		return vector.new(x, y, z)
+	end
+end
+
+local TP_USAGE = "Usage: /tp <player> | /tp <x> <y> <z> | /tp <player> <to player> | /tp <player> <x> <y> <z>"
+
+core.register_chatcommand("tp", {
+	params = "<player> | <x> <y> <z> | <player> <to player> | <player> <x> <y> <z>",
+	description = "Teleport to a player or to coordinates. Moving other players needs the bring permission",
+	privs = {teleport = true},
+	func = function(name, param)
+		local args = {}
+		for word in param:gmatch("%S+") do
+			args[#args + 1] = word
+		end
+		local mover, dest
+		if #args == 1 then
+			mover = name
+			local t = find_player(args[1])
+			if not t then return false, "Player not found: " .. args[1] end
+			dest = t:get_pos()
+		elseif #args == 2 then
+			mover = args[1]
+			local t = find_player(args[2])
+			if not t then return false, "Player not found: " .. args[2] end
+			dest = t:get_pos()
+		elseif #args == 3 then
+			mover = name
+			dest = parse_pos(args[1], args[2], args[3])
+		elseif #args == 4 then
+			mover = args[1]
+			dest = parse_pos(args[2], args[3], args[4])
+		end
+		if not dest then
+			return false, TP_USAGE
+		end
+		if mover ~= name and not core.check_player_privs(name, {bring = true}) then
+			return false, "Moving other players needs the 'bring' permission."
+		end
+		if not find_player(mover) then
+			return false, "Player not found: " .. mover
+		end
+		teleport(mover, dest)
+		return true, "Teleported."
+	end,
+})
+
+core.register_chatcommand("tphere", {
+	params = "<player>",
+	description = "Bring a player to where you are",
+	privs = {teleport = true, bring = true},
+	func = function(name, param)
+		local target = param:trim()
+		if target == "" then
+			return false, "Usage: /tphere <player>"
+		end
+		local me = find_player(name)
+		if not me then return false, "Player not found." end
+		if not find_player(target) then
+			return false, "Player not found: " .. target
+		end
+		teleport(target, me:get_pos())
+		say(target, name .. " brought you here.")
+		return true, "Brought " .. target .. " to you."
+	end,
+})
+
+--------------------------------------------------------------------------------
+-- /rtp: random teleport to a safe spot on the surface of the overworld
+--
+-- Settings (minetest.conf):
+--   cindrix_rtp_min       closest distance from the world centre, default 300
+--   cindrix_rtp_max       farthest distance from the world centre, default 3000
+--   cindrix_rtp_cooldown  seconds between uses per player, default 30
+--------------------------------------------------------------------------------
+
+local rtp_ready_at = {}
+local RTP_ATTEMPTS = 8
+
+local function setting_number(key, default)
+	return tonumber(core.settings:get(key)) or default
+end
+
+local function overworld_limits()
+	local vars = rawget(_G, "mcl_vars")
+	local ymin = (vars and vars.mg_overworld_min) or -128
+	local ymax = (vars and vars.mg_overworld_max_official) or 256
+	return ymin, ymax
+end
+
+local function in_overworld(pos)
+	local worlds = rawget(_G, "mcl_worlds")
+	if worlds and worlds.pos_to_dimension then
+		local ok, dim = pcall(worlds.pos_to_dimension, pos)
+		if ok and dim then
+			return dim == "overworld"
+		end
+	end
+	return true
+end
+
+local function is_liquid(def)
+	return def and def.liquidtype and def.liquidtype ~= "none"
+end
+
+-- Looks down from the sky at one column. Returns the y of solid ground that is
+-- safe to stand on, or nil, reason.
+local function find_surface(x, z, ymin, ymax)
+	local ground
+	for y = ymax, ymin, -1 do
+		local node = core.get_node({x = x, y = y, z = z})
+		if node.name == "ignore" then
+			return nil, "not loaded"
+		end
+		local def = core.registered_nodes[node.name]
+		if def and is_liquid(def) then
+			return nil, "water"
+		end
+		if def and def.walkable then
+			-- skip over tree tops
+			local tree = core.get_item_group(node.name, "leaves")
+				+ core.get_item_group(node.name, "tree")
+				+ core.get_item_group(node.name, "leafdecay")
+			if tree == 0 then
+				if (def.damage_per_second or 0) > 0 then
+					return nil, "dangerous"
+				end
+				ground = y
+				break
+			end
+		end
+	end
+	if not ground then
+		return nil, "no ground"
+	end
+	for dy = 1, 2 do
+		local node = core.get_node({x = x, y = ground + dy, z = z})
+		local def = core.registered_nodes[node.name]
+		if node.name == "ignore" or not def or def.walkable or is_liquid(def)
+				or (def.damage_per_second or 0) > 0 then
+			return nil, "no room"
+		end
+	end
+	return ground
+end
+
+local function rtp_attempt(name, attempt, ymin, ymax)
+	if not find_player(name) then return end
+	if attempt > RTP_ATTEMPTS then
+		say(name, "Couldn't find a safe spot this time. Try /rtp again.")
+		rtp_ready_at[name] = nil
+		return
+	end
+	local rmin = setting_number("cindrix_rtp_min", 300)
+	local rmax = math.max(rmin + 1, setting_number("cindrix_rtp_max", 3000))
+	local angle = math.random() * 2 * math.pi
+	local dist = rmin + math.random() * (rmax - rmin)
+	local x = math.floor(math.cos(angle) * dist)
+	local z = math.floor(math.sin(angle) * dist)
+
+	core.emerge_area({x = x, y = ymin, z = z}, {x = x, y = ymax, z = z},
+		function(_, _, calls_remaining)
+			if calls_remaining > 0 then return end
+			if not find_player(name) then return end
+			local ground = find_surface(x, z, ymin, ymax)
+			if not ground then
+				rtp_attempt(name, attempt + 1, ymin, ymax)
+				return
+			end
+			teleport(name, vector.new(x + 0.5, ground + 1, z + 0.5))
+			say(name, string.format("Teleported to (%d, %d, %d).", x, ground + 1, z))
+		end)
+end
+
+core.register_chatcommand("rtp", {
+	description = "Teleport to a random safe spot in the overworld",
+	privs = PRIV,
+	func = function(name)
+		local player = find_player(name)
+		if not player then return false, "Player not found." end
+		if not in_overworld(player:get_pos()) then
+			return false, "Random teleport only works in the overworld."
+		end
+		local now = os.time()
+		local wait = (rtp_ready_at[name] or 0) - now
+		if wait > 0 then
+			return false, "Please wait " .. wait .. " more seconds before using /rtp again."
+		end
+		rtp_ready_at[name] = now + setting_number("cindrix_rtp_cooldown", 30)
+		local ymin, ymax = overworld_limits()
+		rtp_attempt(name, 1, ymin, ymax)
+		return true, "Looking for a safe spot. This can take a few seconds the first time..."
+	end,
+})
+
+core.register_on_leaveplayer(function(player)
+	rtp_ready_at[player:get_player_name()] = nil
+end)
+
+--------------------------------------------------------------------------------
+-- Warps: shared teleport spots. /warp <name>, /warps, /setwarp <name>, /delwarp <name>
+--------------------------------------------------------------------------------
+
+local storage = core.get_mod_storage()
+
+local function get_warps()
+	local raw = storage:get_string("warps")
+	if raw == "" then return {} end
+	return core.parse_json(raw) or {}
+end
+
+local function warp_name(param)
+	return (param:trim():gsub("[^%w_%-]", "")):sub(1, 24)
+end
+
+core.register_chatcommand("warp", {
+	params = "[name]",
+	description = "Go to a warp (without a name, lists the warps)",
+	privs = PRIV,
+	func = function(name, param)
+		local warps = get_warps()
+		local wn = warp_name(param)
+		if wn == "" then
+			local names = {}
+			for n in pairs(warps) do names[#names + 1] = n end
+			table.sort(names)
+			if #names == 0 then
+				return true, "There are no warps yet. Someone with the teleport permission can add one with /setwarp <name>."
+			end
+			return true, "Warps: " .. table.concat(names, ", ")
+		end
+		local w = warps[wn]
+		if not w then
+			return false, "No warp called '" .. wn .. "'. Use /warp to see the list."
+		end
+		teleport(name, vector.new(w.x, w.y, w.z))
+		return true, "Warped to " .. wn .. "."
+	end,
+})
+
+core.register_chatcommand("warps", {
+	description = "List the warps",
+	privs = PRIV,
+	func = function(name)
+		return core.registered_chatcommands["warp"].func(name, "")
+	end,
+})
+
+core.register_chatcommand("setwarp", {
+	params = "<name>",
+	description = "Create a warp at your position",
+	privs = {teleport = true},
+	func = function(name, param)
+		local player = find_player(name)
+		if not player then return false, "Player not found." end
+		local wn = warp_name(param)
+		if wn == "" then
+			return false, "Usage: /setwarp <name>"
+		end
+		local warps = get_warps()
+		local pos = vector.round(player:get_pos())
+		warps[wn] = {x = pos.x, y = pos.y, z = pos.z}
+		storage:set_string("warps", core.write_json(warps))
+		return true, "Warp '" .. wn .. "' saved."
+	end,
+})
+
+core.register_chatcommand("delwarp", {
+	params = "<name>",
+	description = "Remove a warp",
+	privs = {teleport = true},
+	func = function(name, param)
+		local warps = get_warps()
+		local wn = warp_name(param)
+		if not warps[wn] then
+			return false, "No warp called '" .. wn .. "'."
+		end
+		warps[wn] = nil
+		storage:set_string("warps", core.write_json(warps))
+		return true, "Warp '" .. wn .. "' removed."
+	end,
+})
+
 core.log("action", "[" .. modname .. "] loaded")

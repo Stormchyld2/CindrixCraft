@@ -12,7 +12,8 @@ These need the `cindrix_commands` permission, which new players get by default.
 | --- | --- |
 | `/fly` | Turn flying on or off. Press **K** to start or stop flying, **J** for fast mode |
 | `/heal [player]` | Fill your health. Healing someone else needs the `server` permission |
-| `/eat` | Fill your hunger bar |
+| `/eat` or `/feed` | Fill your hunger bar |
+| `/repair` | Repair the item in your hand |
 | `/god` | Turn invulnerability on or off (resets when you leave) |
 | `/sethome [name]` | Save where you stand as a home (up to 5; no name means `home`) |
 | `/home [name]` | Go to a saved home |
@@ -23,6 +24,22 @@ These need the `cindrix_commands` permission, which new players get by default.
 | `/tpa <player>` | Ask to teleport to another player |
 | `/tpaccept` / `/tpdeny` | Accept or refuse a teleport request (it expires after 60 seconds) |
 | `/day` / `/night` | Set the time to morning or to midnight |
+| `/rtp` | Random teleport to a safe spot on the surface of the overworld. The first use in a new area can take a few seconds while the world is made. There is a 30 second wait between uses |
+| `/warp [name]` | Go to a shared warp (no name lists them) |
+| `/warps` | List the warps |
+
+These need the `teleport` permission (Builder does not have it, Moderator and Admin do):
+
+| Command | What it does |
+| --- | --- |
+| `/tp <player>` | Teleport to a player |
+| `/tp <x> <y> <z>` | Teleport to coordinates |
+| `/tp <player> <to player>` | Move one player to another (also needs `bring`) |
+| `/tp <player> <x> <y> <z>` | Move a player to coordinates (also needs `bring`) |
+| `/tphere <player>` | Bring a player to you (also needs `bring`) |
+| `/setwarp <name>` / `/delwarp <name>` | Create or remove a warp at your position |
+
+Settings for `/rtp` (in `minetest.conf`): `cindrix_rtp_min` (closest distance from the world centre, default 300), `cindrix_rtp_max` (farthest, default 3000), `cindrix_rtp_cooldown` (seconds, default 30).
 
 Anyone can use these:
 
@@ -122,6 +139,14 @@ These are part of the engine, so they work in any game. Type `/help` in the game
 
 Keys can be changed in Settings.
 
+## Not built yet
+
+Checked against the Minecraft Java command list and the part of the EssentialsX list that could be read. These are ideas, not promises:
+
+- **Minecraft:** `/clear`, `/fill`, `/clone`, `/gamerule`, `/setworldspawn`, `/spawnpoint`, `/locate`, `/whitelist`, `/worldborder`, `/spreadplayers`, `/team`, `/tag`, `/scoreboard`, `/bossbar`, `/stop`, `/save-all`, `/pardon`, `/ban-ip`. Several already have a Luanti or Mineclonia equivalent under another name (for example `/shutdown` for `/stop`, `/unban` for `/pardon`, `/findbiome` for `/locate`).
+- **EssentialsX:** `/nick`, `/mute`, `/hat`, `/speed`, `/vanish`, `/afk`, `/mail`, `/kit`, `/jail`, `/enderchest`, `/workbench`, `/itemdb`, `/tpall`, `/tpo`.
+- Minecraft has no command for flying, healing or home points, so those only exist because of EssentialsX-style commands; we cover the main ones above.
+
 ## Keeping this up to date
 
-The "added by CindrixCraft" part is written by hand, so update it whenever a command is added. The Mineclonia list was generated from the game files for version 0.124.1 (command descriptions shortened); `/help` in the game is always the final word on what your permissions allow.
+The "added by CindrixCraft" part is written by hand, so update it whenever a command is added. The EssentialsX web page that lists every command would not load for me, so the "not built yet" list for it is partial. The Mineclonia list was generated from the game files for version 0.124.1 (command descriptions shortened); `/help` in the game is always the final word on what your permissions allow.
