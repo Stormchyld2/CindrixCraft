@@ -524,24 +524,30 @@ local function get_formspec(dialogdata)
 		core.settings:get_bool("touch_gui") and "padding[0.01,0.01]" or "",
 		"bgcolor[#0000]",
 
+		-- CindrixCraft theme
+		"style_type[button;bgcolor=#8F2F12;textcolor=#FFE3B0]",
+		"style_type[button:hovered;bgcolor=#D9501F]",
+		"style[back;bgcolor=#D9501F]",
+
 		-- HACK: this is needed to allow resubmitting the same formspec
 		formspec_show_hack and " " or "",
 
-		"box[0,0;", tostring(tabsize.width), ",", tostring(tabsize.height), ";#0000008C]",
+		"box[0,0;", tostring(tabsize.width), ",", tostring(tabsize.height), ";#14110FEE]",
+		"box[0,0;", tostring(tabsize.width), ",0.06;#F2A541]",
 
 		("button[0,%f;%f,0.8;back;%s]"):format(
 				tabsize.height + 0.2, back_w,
 				-- TRANSLATORS: Button text to go back
 				fgettext("Back")),
 
-		("box[%f,%f;%f,0.8;#0000008C]"):format(
+		("box[%f,%f;%f,0.8;#2A2420F0]"):format(
 			back_w + 0.2, tabsize.height + 0.2, checkbox_w),
 		("checkbox[%f,%f;show_technical_names;%s;%s]"):format(
 			back_w + 2*0.2, tabsize.height + 0.6,
 			-- TRANSLATORS: Checkbox that toggles displaying the technical setting names
 			fgettext("Show technical names"), tostring(show_technical_names)),
 
-		("box[%f,%f;%f,0.8;#0000008C]"):format(
+		("box[%f,%f;%f,0.8;#2A2420F0]"):format(
 			back_w + 2*0.2 + checkbox_w, tabsize.height + 0.2, checkbox_w),
 		("checkbox[%f,%f;show_advanced;%s;%s]"):format(
 			back_w + 3*0.2 + checkbox_w, tabsize.height + 0.6,
@@ -560,8 +566,8 @@ local function get_formspec(dialogdata)
 		"container_end[]",
 		("scroll_container[0.25,1.25;%f,%f;leftscroll;vertical;0.1;0]"):format(
 			left_pane_width, tabsize.height - 1.5),
-		"style_type[button;border=false;bgcolor=#3333]",
-		"style_type[button:hover;border=false;bgcolor=#6663]",
+		"style_type[button;border=false;bgcolor=#00000000;textcolor=#E9E2D8]",
+		"style_type[button:hovered;border=false;bgcolor=#8F2F12;textcolor=#FFE3B0]",
 	}
 
 	local y = 0
@@ -569,12 +575,12 @@ local function get_formspec(dialogdata)
 	for _, other_page in ipairs(filtered_pages) do
 		if other_page.section ~= last_section then
 			fs[#fs + 1] = ("label[0.1,%f;%s]"):format(
-				y + 0.41, core.colorize("#ff0", fgettext(other_page.section)))
+				y + 0.41, core.colorize("#F2A541", fgettext(other_page.section)))
 			last_section = other_page.section
 			y = y + 0.82
 		end
 		fs[#fs + 1] = ("box[0,%f;%f,0.8;%s]"):format(
-			y, left_pane_width-left_pane_padding, other_page.id == page_id and "#467832FF" or "#3339")
+			y, left_pane_width-left_pane_padding, other_page.id == page_id and "#D9501F" or "#2A2420")
 		fs[#fs + 1] = ("button[0,%f;%f,0.8;page_%s;%s]")
 			:format(y, left_pane_width-left_pane_padding, other_page.id, fgettext(other_page.title))
 		y = y + 0.82
@@ -594,7 +600,8 @@ local function get_formspec(dialogdata)
 				left_pane_width + 0.25, scrollbar_w, tabsize.height - 1.5, dialogdata.leftscroll or 0)
 	end
 
-	fs[#fs + 1] = "style_type[button;border=;bgcolor=]"
+	fs[#fs + 1] = "style_type[button;border=;bgcolor=#8F2F12;textcolor=#FFE3B0]"
+	fs[#fs + 1] = "style_type[button:hovered;border=;bgcolor=#D9501F]"
 
 	if not dialogdata.components then
 		dialogdata.components = page and build_page_components(page) or {}

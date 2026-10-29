@@ -48,6 +48,20 @@ Anyone can use these:
 | `/who` | Who is online. When two or more people are playing, the names also show at the top of the screen |
 | `/list` | Who is logged on (from Mineclonia) |
 | `/seen <player>` | When a player was last online, and where |
+| `/realname <nickname>` | Show the real account name behind a nickname |
+
+## Nicknames and chat names
+
+| Command | What it does |
+| --- | --- |
+| `/nick <nickname>` | Choose a display name (3 to 16 letters, numbers, `_` or `-`). It shows above your head, in chat and in the online list. Needs `cindrix_commands` |
+| `/nick off` | Go back to your real name |
+| `/nick <player> <nickname\|off>` | Change someone else's nickname (host only, needs `server`) |
+
+- Your real account name never changes. It is what the game uses to save your inventory, position and permissions, so a nickname can't make you start over.
+- A nickname can't be another player's name or one already in use.
+- `/tp`, `/tpa`, `/tphere`, `/heal` and `/role` accept a nickname wherever they ask for a player. `/who` shows both ("Nick (RealName)").
+- Operators and moderators get a coloured tag in chat: **[Admin]** and **[Mod]**. Turn the tags off with `cindrix_chat_tags = false`; change the longest nickname with `cindrix_nick_max_length`.
 
 ## Permissions menu (like LuckPerms)
 

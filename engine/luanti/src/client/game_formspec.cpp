@@ -377,44 +377,72 @@ void GameFormSpec::showPauseMenu()
 
 	auto simple_singleplayer_mode = m_client->m_simple_singleplayer_mode;
 
-	float ypos = simple_singleplayer_mode ? 0.7f : 0.1f;
+	// CindrixCraft: themed pause menu (ember and amber on dark, logo header).
+	// The button names are unchanged because HardcodedPauseFormspecHandler and
+	// the pause menu script react to them.
+	float ypos = 2.25f;
+	const float bx = 4.6f, bw = 3.0f, bh = 0.85f, bstep = 1.05f;
 	std::ostringstream os;
 
-	os << "formspec_version[1]" << SIZE_TAG
-		<< "button_exit[4," << (ypos++) << ";3,0.5;btn_continue;"
+	os << "formspec_version[6]" << "size[11.6,9.6,true]"
+		<< "bgcolor[#14110FF2;both;#2A2420]"
+		<< "style_type[button;bgcolor=#8F2F12;textcolor=#FFE3B0;font_style=bold]"
+		<< "style_type[button:hovered;bgcolor=#D9501F]"
+		<< "style_type[button:pressed;bgcolor=#F2A541;textcolor=#14110F]"
+		<< "style[btn_continue;bgcolor=#D9501F]"
+		<< "style[btn_exit_menu,btn_exit_os;bgcolor=#4A1A0C]"
+		<< "style_type[label;textcolor=#F2A541;font_style=bold]"
+		<< "style_type[textarea;textcolor=#E9E2D8]"
+		<< "image[1.4,0.3;8.8,0.94;menu_header.png]"
+		<< "box[0.4,2.1;3.9,7.0;#00000055]"
+		<< "label[4.6,1.75;" << (simple_singleplayer_mode
+			? strgettext("Game paused") : std::string(PROJECT_NAME_C)) << "]";
+
+	os << "button_exit[" << bx << "," << ypos << ";" << bw << "," << bh
+		<< ";btn_continue;"
 		// TRANSLATORS: Pause menu button, try to keep the translation short
 		<< strgettext("Continue") << "]";
+	ypos += bstep;
 
 	if (!simple_singleplayer_mode) {
-		os << "button[4," << (ypos++) << ";3,0.5;btn_change_password;"
+		os << "button[" << bx << "," << ypos << ";" << bw << "," << bh
+			<< ";btn_change_password;"
 			// TRANSLATORS: Pause menu button, try to keep the translation short
 			<< strgettext("Change Password") << "]";
-	} else {
-		os << "field[4.95,0;5,1.5;;" << strgettext("Game paused") << ";]";
+		ypos += bstep;
 	}
 
-	os	<< "button[4," << (ypos++) << ";3,0.5;btn_settings;"
+	os << "button[" << bx << "," << ypos << ";" << bw << "," << bh
+		<< ";btn_settings;"
 		// TRANSLATORS: Try to keep the translation short
 		<< strgettext("Settings") << "]";
+	ypos += bstep;
 
 #ifndef __ANDROID__
 #if USE_SOUND
-	os << "button[4," << (ypos++) << ";3,0.5;btn_sound;"
+	os << "button[" << bx << "," << ypos << ";" << bw << "," << bh
+		<< ";btn_sound;"
 		// TRANSLATORS: Pause menu button, try to keep the translation short
 		<< strgettext("Sound Volume") << "]";
+	ypos += bstep;
 #endif
 #endif
 
-	os		<< "button_exit[4," << (ypos++) << ";3,0.5;btn_exit_menu;"
+	// gap before the exit buttons
+	ypos += 0.25f;
+	os << "button_exit[" << bx << "," << ypos << ";" << bw << "," << bh
+		<< ";btn_exit_menu;"
 		// TRANSLATORS: Pause menu button, try to keep the translation short
 		<< strgettext("Exit to Menu") << "]";
-	os		<< "button_exit[4," << (ypos++) << ";3,0.5;btn_exit_os;"
+	ypos += bstep;
+	os << "button_exit[" << bx << "," << ypos << ";" << bw << "," << bh
+		<< ";btn_exit_os;"
 		// TRANSLATORS: Pause menu button, try to keep the translation short (OS = Operating System)
-		<< strgettext("Exit to OS")   << "]";
+		<< strgettext("Exit to OS") << "]";
 	if (!control_text.empty()) {
-	os		<< "textarea[7.5,0.25;3.9,6.25;;" << control_text << ";]";
+		os << "textarea[7.9,2.1;3.4,7.0;;" << control_text << ";]";
 	}
-	os		<< "textarea[0.4,0.25;3.9,6.25;;" << PROJECT_NAME_C " " VERSION_STRING "\n"
+	os		<< "textarea[0.5,2.2;3.7,6.8;;" << PROJECT_NAME_C " " VERSION_STRING "\n"
 		<< "\n"
 		<<  strgettext("Game info:") << "\n";
 	const std::string &address = m_client->getAddressName();

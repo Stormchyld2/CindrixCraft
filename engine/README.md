@@ -31,6 +31,8 @@
 
 - LAN discovery (`src/network/lan_discovery.*`): a hosted world announces itself with a small UDP broadcast on port 30001 every 2 seconds (setting `lan_announce`, default on; the name comes from `lan_server_name` or `server_name`). The Multiplayer tab listens and shows these under "On your network", so nobody types an IP. It does not touch the game protocol. Singleplayer worlds that are not hosted never announce.
 
+- Pause menu (`src/client/game_formspec.cpp`, `showPauseMenu`) and settings dialog (`builtin/common/settings/dlg_settings.lua`) restyled in the CindrixCraft colours with the logo header. Button names are unchanged so everything that reacts to them still works.
+
 ## Planned changes
 
 1. Remaining menu text that still says Luanti (some dialogs and translated strings).

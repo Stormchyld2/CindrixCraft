@@ -20,8 +20,25 @@ local function say(name, text)
 	core.chat_send_player(name, core.colorize("#F2A541", text))
 end
 
+-- Nicknames (from cindrix_names) work wherever a player name is expected
+local function resolve(name)
+	local names = rawget(_G, "cindrix_names")
+	if names and names.resolve then
+		return names.resolve(name)
+	end
+	return name
+end
+
+local function shown(name)
+	local names = rawget(_G, "cindrix_names")
+	if names and names.display_name then
+		return names.display_name(name)
+	end
+	return name
+end
+
 local function find_player(name)
-	return core.get_player_by_name(name)
+	return core.get_player_by_name(resolve(name))
 end
 
 local function max_hp(player)
@@ -91,7 +108,7 @@ core.register_chatcommand("heal", {
 			if not core.check_player_privs(name, {server = true}) then
 				return false, "Only the host can heal other players."
 			end
-			target = param
+			target = resolve(param)
 		end
 		local player = find_player(target)
 		if not player then
@@ -305,7 +322,7 @@ core.register_chatcommand("tpa", {
 	description = "Ask another player if you can teleport to them",
 	privs = PRIV,
 	func = function(name, param)
-		local target = param:trim()
+		local target = resolve(param:trim())
 		if target == "" then
 			return false, "Usage: /tpa <player>"
 		end
@@ -400,7 +417,7 @@ local function online_names(exclude)
 	for _, p in ipairs(core.get_connected_players()) do
 		local n = p:get_player_name()
 		if n ~= exclude then
-			names[#names + 1] = n
+			names[#names + 1] = shown(n)
 		end
 	end
 	table.sort(names)
@@ -447,8 +464,14 @@ end)
 core.register_chatcommand("who", {
 	description = "Show who is online",
 	func = function(name)
-		local names = online_names()
-		return true, "Online (" .. #names .. "): " .. table.concat(names, ", ")
+		local list = {}
+		for _, p in ipairs(core.get_connected_players()) do
+			local real = p:get_player_name()
+			local nick = shown(real)
+			list[#list + 1] = (nick ~= real) and (nick .. " (" .. real .. ")") or real
+		end
+		table.sort(list, function(a, b) return a:lower() < b:lower() end)
+		return true, "Online (" .. #list .. "): " .. table.concat(list, ", ")
 	end,
 })
 
@@ -510,7 +533,7 @@ core.register_chatcommand("tp", {
 			if not t then return false, "Player not found: " .. args[1] end
 			dest = t:get_pos()
 		elseif #args == 2 then
-			mover = args[1]
+			mover = resolve(args[1])
 			local t = find_player(args[2])
 			if not t then return false, "Player not found: " .. args[2] end
 			dest = t:get_pos()
@@ -518,7 +541,7 @@ core.register_chatcommand("tp", {
 			mover = name
 			dest = parse_pos(args[1], args[2], args[3])
 		elseif #args == 4 then
-			mover = args[1]
+			mover = resolve(args[1])
 			dest = parse_pos(args[2], args[3], args[4])
 		end
 		if not dest then
@@ -540,7 +563,7 @@ core.register_chatcommand("tphere", {
 	description = "Bring a player to where you are",
 	privs = {teleport = true, bring = true},
 	func = function(name, param)
-		local target = param:trim()
+		local target = resolve(param:trim())
 		if target == "" then
 			return false, "Usage: /tphere <player>"
 		end

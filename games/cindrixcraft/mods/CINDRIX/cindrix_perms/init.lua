@@ -63,6 +63,16 @@ local function is_admin(name)
 	return name == core.settings:get("name") or core.is_singleplayer()
 end
 
+-- Small API for the other CindrixCraft mods (chat tags, nicknames)
+cindrix_perms = {}
+
+function cindrix_perms.get_role(name)
+	if name == core.settings:get("name") then
+		return "Admin"
+	end
+	return assignments[name]
+end
+
 local function role_names()
 	local list = {}
 	for name in pairs(roles) do
