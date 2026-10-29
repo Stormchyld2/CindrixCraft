@@ -9,8 +9,10 @@ Locked-in logo design: a voxel cube (3x3x3 small cubes, with four removed at the
 | `cube.svg` | Vector master of the voxel cube mark |
 | `icon-512.png`, `icon-1024.png` | Square icon, cube on the dark ground |
 | `cube-512-transparent.png` | Cube alone on a transparent background |
+| `wordmark-lockup.png` | Full logo with tagline, 1760x1120 (2x of the 880x560 design) |
+| `menu-header.png` | Wide header for menus, 2048x400 (2x of the 1024x200 design) |
 
-**Not in this folder yet:** the wordmark lockup and the wide menu header images. They use the Barlow Condensed typeface, which wasn't available where these files were rendered. They'll be added once exported from the design canvas.
+The lockup and header were exported from the design canvas, so they use the exact typeface and spacing described below. They have a solid dark background; the cube outlines are the same colour as the ground, so we haven't made transparent versions of them.
 
 ## Palette
 
