@@ -2,7 +2,7 @@
 
 An offline-first, moddable voxel survival game for playing with friends and family on a local network, with no internet connection required.
 
-CindrixCraft is built on [Luanti](https://www.luanti.org/) (formerly Minetest), using a Minecraft-style base game (VoxeLibre or Mineclonia) and the Luanti mod ecosystem. The goal is a game that feels like Minecraft with Essentials-style LAN play, runs fully off-grid, and can be extended with our own mods.
+CindrixCraft is built on [Luanti](https://www.luanti.org/) (formerly Minetest), using [Mineclonia](https://content.luanti.org/packages/ryvnf/mineclonia) as the base game (the Luanti game that follows Minecraft most closely) and the Luanti mod ecosystem. The goal is a game that feels like Minecraft with Essentials-style LAN play, runs fully off-grid, and can be extended with our own mods.
 
 ## Goals
 
@@ -16,10 +16,11 @@ CindrixCraft is built on [Luanti](https://www.luanti.org/) (formerly Minetest), 
 
 | Folder | Purpose |
 | --- | --- |
-| `games/` | Base games (VoxeLibre or Mineclonia). One per world. |
+| `games/` | Base game (Mineclonia) |
 | `mods/` | ContentDB mods and our own custom mods |
 | `server/` | Off-grid server config and setup scripts |
 | `launcher/` | LAN discovery tool (planned) |
+| `docs/` | Guides, including how to port mods |
 
 ## Status
 
@@ -27,7 +28,7 @@ Early setup. Nothing here runs yet; this repo is the skeleton.
 
 ## Roadmap
 
-1. Choose the base game (VoxeLibre or Mineclonia)
+1. Base game: Mineclonia (decided)
 2. Vendor Luanti, the base game, and a starter set of mods for fully offline install
 3. Server config and setup script for the always-on machine
 4. LAN discovery launcher
@@ -42,4 +43,4 @@ Early setup. Nothing here runs yet; this repo is the skeleton.
 
 ## License
 
-Not chosen yet. Luanti's engine is LGPL, and VoxeLibre and Mineclonia are GPL, so whatever we bundle with them has to stay GPL-compatible. See `CREDITS.md` for everything we pull in.
+Not chosen yet. Luanti's engine is LGPL, and Mineclonia is free software (we still need to confirm its exact license from its repo), so whatever we bundle with them has to stay compatible with those licenses. See `CREDITS.md` for everything we pull in.

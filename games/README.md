@@ -1,7 +1,7 @@
 # games/
 
-Base games go here, one folder per game (for example `mineclone2` for VoxeLibre or `mineclonia`).
+The base game goes here: Mineclonia, in a folder named `mineclonia` (confirm the exact game id once it's added).
 
-Pick one base game per world. VoxeLibre and Mineclonia come from the same ancestor but have diverged, so they can't share a world or be mixed.
+Mineclonia needs Luanti 5.9 or later.
 
-Record the version and license of whatever you add in `../CREDITS.md`.
+Record the version and license in `../CREDITS.md`.

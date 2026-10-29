@@ -5,10 +5,10 @@ Setup for the off-grid server: a small always-on machine on your router or a sta
 ## Running it
 
 ```
-luanti --server --config server/luanti.conf --gameid <game id>
+luanti --server --config server/luanti.conf --gameid mineclonia
 ```
 
-The game id depends on the base game you chose (check the folder name under `games/`). Clients connect to the machine's IP on UDP port 30000. Give the server a static IP and save it as a favorite in each client.
+The game id is the folder name under `games/`; confirm it once the game is added. Clients connect to the machine's IP on UDP port 30000. Give the server a static IP and save it as a favorite in each client.
 
 ## Files
 

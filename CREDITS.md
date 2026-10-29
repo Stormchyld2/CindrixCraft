@@ -5,7 +5,6 @@ Everything bundled with or derived into CindrixCraft is listed here with its sou
 | Name | Type | Source | License |
 | --- | --- | --- | --- |
 | Luanti | Engine | https://www.luanti.org/ | LGPL |
-| VoxeLibre | Base game | https://content.luanti.org/ | GPL (verify per component) |
-| Mineclonia | Base game | https://content.luanti.org/ | GPL (verify per component) |
+| Mineclonia | Base game | https://content.luanti.org/packages/ryvnf/mineclonia | Not stated on ContentDB; confirm from the repo before bundling |
 
 Licenses for individual mods and assets vary. Check each one on ContentDB before bundling it, and record it here.
