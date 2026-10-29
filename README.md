@@ -22,6 +22,14 @@ CindrixCraft is built on [Luanti](https://www.luanti.org/) (formerly Minetest), 
 | `launcher/` | LAN discovery tool (planned) |
 | `docs/` | Guides, including how to port mods |
 
+## Docs
+
+- [Platforms: Windows and Android](docs/platforms.md)
+- [Offline server](docs/offline-server.md)
+- [Writing mods](docs/mod-development.md)
+- [Porting mods](docs/porting-mods.md)
+- [LAN discovery design](docs/lan-discovery.md)
+
 ## Status
 
 Early setup. Nothing here runs yet; this repo is the skeleton.
