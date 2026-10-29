@@ -15,9 +15,16 @@
 - Keep every upstream license and copyright notice. Our changes are shared under the same licenses.
 - To update to a new Luanti release, diff the new tag against the baseline above and reapply our changes.
 
+## Changes so far
+
+- Executable and project name: `cindrixcraft` / `cindrixcraftserver`, shown as "CindrixCraft" in window titles, logs and the Windows file properties (`CMakeLists.txt`, `src/CMakeLists.txt`, `misc/winresource.rc`).
+- User data folders: `%APPDATA%\CindrixCraft` on Windows, `~/.cindrixcraft` on Linux and macOS (`src/porting.cpp`), so it never mixes with a normal Luanti install. The portable build still keeps data next to the program.
+- Icons and menu logos replaced with the CindrixCraft cube and header (`misc/luanti-icon.*`, `misc/luanti.svg`, `textures/base/pack/logo.png`, `menu_header.png`). The file names still say luanti on purpose, to keep the patch small.
+- The internal translation domain stays `luanti`, so upstream translations keep working (`src/gettext.cpp`, `src/CMakeLists.txt`, `cmake/Modules/FindGettextLib.cmake`).
+- Windows build: `.github/workflows/windows-engine.yml` at the repo root builds a 64-bit zip on GitHub (this environment has no cross-compiler).
+
 ## Planned changes
 
-1. Branding: executable name, icon, window title, menu and about text.
-2. Separate user data folder name, so it never mixes with a normal Luanti install.
-3. Android: own app ID, name, icon and signing key.
-4. Optional: start straight into the CindrixCraft game.
+1. Text in menus and the about tab that still says Luanti (`builtin/mainmenu/`). These are translated strings, so each change needs care.
+2. Android: own app ID, name, icon and signing key.
+3. Optional: start straight into the CindrixCraft game.

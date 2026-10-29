@@ -1,0 +1,48 @@
+name: windows-engine
+
+# Builds the CindrixCraft engine (our fork of Luanti in engine/luanti) for Windows 64-bit
+# with the MinGW cross-compiler, the same way upstream Luanti does.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'engine/luanti/**'
+      - '.github/workflows/windows-engine.yml'
+
+jobs:
+  mingw64:
+    name: Windows 64-bit (MinGW cross-compiler)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: engine/luanti
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install compiler
+        run: |
+          source ./util/ci/common.sh
+          install_mingw_deps '64' 'false'
+          sudo ./util/buildbot/download_toolchain.sh /usr
+
+      - name: Build
+        run: |
+          EXISTING_MINETEST_DIR=$PWD \
+          ./util/buildbot/buildwin64.sh B
+          mkdir -p artifact
+          cp -v B/build/*.zip artifact/
+
+      # Check that the resulting binary runs (DLLs etc.)
+      - name: Runtime test
+        run: |
+          dest=$(mktemp -d)
+          unzip -q -d "$dest" artifact/*.zip
+          cd "$dest"/*-win64
+          ls bin
+          wine bin/cindrixcraft.exe --version
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: cindrixcraft-win64
+          path: engine/luanti/artifact/*.zip
+          if-no-files-found: error
