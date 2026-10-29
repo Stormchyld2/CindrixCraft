@@ -7,7 +7,7 @@ All original license, copyright and credit files are kept unchanged.
 
 Changes made for CindrixCraft:
 
-- `game.conf`: title and description.
+- `game.conf`: title and description, plus `aliases = mineclonia` so worlds made with stock Mineclonia open as CindrixCraft worlds.
 - `menu/header.png`, `menu/icon.png`: replaced with the CindrixCraft logo.
 - `mods/CINDRIX/`: new modpack with CindrixCraft's own mods (`cindrix_core`).
 - `mods/MISC/mcl_commands/version.lua`: the `/version` command says CindrixCraft.
