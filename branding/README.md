@@ -11,8 +11,12 @@ Locked-in logo design: a voxel cube (3x3x3 small cubes, with four removed at the
 | `cube-512-transparent.png` | Cube alone on a transparent background |
 | `wordmark-lockup.png` | Full logo with tagline, 1760x1120 (2x of the 880x560 design) |
 | `menu-header.png` | Wide header for menus, 2048x400 (2x of the 1024x200 design) |
+| `wordmark-lockup-transparent.png` | Same lockup on a transparent background |
+| `menu-header-transparent.png` | Same header on a transparent background |
 
-The lockup and header were exported from the design canvas, so they use the exact typeface and spacing described below. They have a solid dark background; the cube outlines are the same colour as the ground, so we haven't made transparent versions of them.
+The lockup and header were exported from the design canvas, so they use the exact typeface and spacing described below.
+
+**Transparent versions:** the cube's outlines are the same colour as the dark ground, so removing the background would erase them. In these files the lettering has its background removed with its true colours kept, and the cube is the transparent vector render (`cube.svg`) placed in the same spot. Use them on dark or mid-tone backgrounds: the off-white CINDRIX lettering and the grey tagline fade out on very light backgrounds.
 
 ## Palette
 
