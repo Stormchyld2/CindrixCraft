@@ -1,0 +1,13 @@
+# World data and runtime files
+worlds/
+*.sqlite
+debug.txt
+
+# Local overrides
+server/local.conf
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
