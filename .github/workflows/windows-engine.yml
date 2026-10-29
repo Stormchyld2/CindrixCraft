@@ -44,6 +44,17 @@ jobs:
           path: build-log-tail.txt
           if-no-files-found: ignore
 
+      - name: Keep the build log
+        if: always()
+        run: tail -n 300 "$RUNNER_TEMP/build.log" > "$GITHUB_WORKSPACE/build-log-tail.txt" || true
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: build-log
+          path: build-log-tail.txt
+          if-no-files-found: ignore
+
       # Check that the resulting binary runs (DLLs etc.)
       - name: Runtime test
         run: |
