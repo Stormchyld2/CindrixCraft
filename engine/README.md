@@ -10,7 +10,7 @@
 
 ## Rules
 
-- The commit titled "Add Luanti 5.17.0 source" is the untouched baseline. Everything we change comes after it, so a diff against that commit limited to `engine/luanti` always shows exactly what we changed.
+- Commit `f4b5b96` is the untouched baseline (the Luanti 5.17.0 source exactly as released). Everything we change comes after it, so a diff against that commit limited to `engine/luanti` always shows exactly what we changed.
 - Keep changes small and focused (branding first). Do not reformat or reorganise upstream files.
 - Keep every upstream license and copyright notice. Our changes are shared under the same licenses.
 - To update to a new Luanti release, diff the new tag against the baseline above and reapply our changes.
