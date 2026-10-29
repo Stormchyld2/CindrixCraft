@@ -17,8 +17,8 @@ CindrixCraft is built on [Luanti](https://www.luanti.org/) (formerly Minetest), 
 | Folder | Purpose |
 | --- | --- |
 | `engine/` | Our fork of the Luanti engine (source) |
-| `games/` | Base game (Mineclonia) |
-| `mods/` | ContentDB mods and our own custom mods |
+| `games/` | The CindrixCraft game (modified Mineclonia) |
+| `mods/` | Extra mods from ContentDB (our own mods live inside the game, in `games/cindrixcraft/mods/CINDRIX/`) |
 | `server/` | Off-grid server config and setup scripts |
 | `launcher/` | LAN discovery tool (planned) |
 | `docs/` | Guides, including how to port mods |
