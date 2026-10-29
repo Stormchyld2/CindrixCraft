@@ -98,6 +98,9 @@ private:
 
 	static int l_get_mainmenu_path(lua_State *L);
 
+	// CindrixCraft: LAN discovery
+	static int l_get_lan_servers(lua_State *L);
+
 	static int l_get_user_path(lua_State *L);
 
 	static int l_get_modpath(lua_State *L);

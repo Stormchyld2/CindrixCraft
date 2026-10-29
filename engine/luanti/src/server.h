@@ -9,6 +9,7 @@
 #include "hud_element.h" // HudElementStat
 #include "gamedef.h"
 #include "content/subgames.h"
+#include "network/lan_discovery.h" // CindrixCraft
 #include "network/peerhandler.h"
 #include "util/thread.h"
 #include "util/basic_macros.h"
@@ -468,6 +469,7 @@ public:
 
 	// Bind address
 	Address m_bind_addr;
+	lan::Announcer m_lan_announcer; // CindrixCraft: LAN discovery
 
 	// Public helper for taking the envlock in a scope
 	class EnvAutoLock {

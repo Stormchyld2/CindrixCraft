@@ -543,6 +543,9 @@ void set_default_settings()
 
 	// Server list announcing
 	settings->setDefault("server_announce", "false");
+	// CindrixCraft: announce hosted worlds on the local network
+	settings->setDefault("lan_announce", "true");
+	settings->setDefault("lan_server_name", "");
 	settings->setDefault("server_url", "");
 	settings->setDefault("server_address", "");
 	settings->setDefault("server_name", "");

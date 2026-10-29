@@ -33,6 +33,7 @@
 	#include "client/sound/sound_openal.h"
 #endif
 
+#include "network/lan_discovery.h"
 #include <algorithm>
 #include <csignal>
 
@@ -396,6 +397,10 @@ void GUIEngine::run()
 
 		m_script->step();
 
+		// CindrixCraft: refresh the menu when worlds appear on the LAN
+		if (lan::listener().poll())
+			m_script->handleMainMenuEvent("Refresh");
+
 		sound_volume_control(m_sound_manager.get(), device->isWindowActive());
 		m_sound_manager->step(dtime);
 
@@ -406,6 +411,7 @@ void GUIEngine::run()
 	framemarker.end();
 
 	m_script->beforeClose();
+	lan::listener().stop();
 
 	RenderingEngine::autosaveScreensizeAndCo(initial_screen_size, initial_window_maximized);
 }

@@ -25,6 +25,9 @@ public:
 	// Returns -1 if there is no data
 	int Receive(Address &sender, void *data, int size);
 	void setTimeoutMs(int timeout_ms);
+	// CindrixCraft: needed for LAN discovery (IPv4 sockets)
+	void SetBroadcast(bool enable);
+	void SetReuseAddr(bool enable);
 	// Returns true if there is data, false if timeout occurred
 	bool WaitData(int timeout_ms);
 

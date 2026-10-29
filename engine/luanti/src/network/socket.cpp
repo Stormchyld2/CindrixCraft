@@ -163,6 +163,26 @@ void UDPSocket::Bind(Address addr)
 	}
 }
 
+void UDPSocket::SetBroadcast(bool enable)
+{
+	int value = enable ? 1 : 0;
+	if (setsockopt(m_handle, SOL_SOCKET, SO_BROADCAST,
+			reinterpret_cast<const char *>(&value), sizeof(value)) != 0) {
+		warningstream << "Failed to set SO_BROADCAST: "
+			<< SOCKET_ERR_STR(LAST_SOCKET_ERR()) << std::endl;
+	}
+}
+
+void UDPSocket::SetReuseAddr(bool enable)
+{
+	int value = enable ? 1 : 0;
+	if (setsockopt(m_handle, SOL_SOCKET, SO_REUSEADDR,
+			reinterpret_cast<const char *>(&value), sizeof(value)) != 0) {
+		warningstream << "Failed to set SO_REUSEADDR: "
+			<< SOCKET_ERR_STR(LAST_SOCKET_ERR()) << std::endl;
+	}
+}
+
 void UDPSocket::Send(const Address &destination, const void *data, int size)
 {
 	bool dumping_packet = false; // for INTERNET_SIMULATOR

@@ -675,6 +675,25 @@ void Server::AsyncRunStep(float dtime, bool initial_step)
 		return;
 	}
 
+	// CindrixCraft: announce this world on the local network (separate UDP
+	// port, does not touch the game protocol). Not used in simple singleplayer.
+	if (!m_simple_singleplayer_mode && g_settings->getBool("lan_announce") &&
+			m_lan_announcer.due(dtime)) {
+		lan::Info info;
+		std::string name;
+		if (!g_settings->getNoEx("lan_server_name", name) || name.empty())
+			g_settings->getNoEx("server_name", name);
+		if (name.empty())
+			name = "CindrixCraft world";
+		info.name = name;
+		info.port = m_bind_addr.getPort();
+		info.game = m_gamespec.id;
+		info.players = (u32)m_clients.getClientIDs().size();
+		info.max_players = g_settings->getU16("max_users");
+		info.version = g_version_string;
+		m_lan_announcer.send(info);
+	}
+
 	{
 		// Send blocks to clients
 		SendBlocks(dtime);

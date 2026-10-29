@@ -10,6 +10,9 @@
 
 ## Rules
 
+- **Stay compatible with stock Luanti.** Do not change `src/network/networkprotocol.*`, the protocol version, or the packets between client and server. A CindrixCraft client must still be able to join a stock Luanti 5.17 server and the other way round, and all our own clients and servers must keep working with each other. New network features use their own separate port, like LAN discovery does.
+- Build every client and server (Windows, Android, the Note10 server) from the same commit, and keep the game version (`games/cindrixcraft`) the same everywhere, so nothing drifts apart.
+
 - Commit `f4b5b96` is the untouched baseline (the Luanti 5.17.0 source exactly as released). Everything we change comes after it, so a diff against that commit limited to `engine/luanti` always shows exactly what we changed.
 - Keep changes small and focused (branding first). Do not reformat or reorganise upstream files.
 - Keep every upstream license and copyright notice. Our changes are shared under the same licenses.
@@ -25,6 +28,8 @@
 
 - Main menu (`builtin/mainmenu/`): CindrixCraft is always the selected game, the game picker bar is hidden when only one game is installed, the tabs are named Play and Multiplayer, and the About tab and the "no game found" message mention CindrixCraft, Luanti and Mineclonia.
 - The Windows build now bundles `games/cindrixcraft` and removes the `devtest` test game, so the zip runs with no setup.
+
+- LAN discovery (`src/network/lan_discovery.*`): a hosted world announces itself with a small UDP broadcast on port 30001 every 2 seconds (setting `lan_announce`, default on; the name comes from `lan_server_name` or `server_name`). The Multiplayer tab listens and shows these under "On your network", so nobody types an IP. It does not touch the game protocol. Singleplayer worlds that are not hosted never announce.
 
 ## Planned changes
 

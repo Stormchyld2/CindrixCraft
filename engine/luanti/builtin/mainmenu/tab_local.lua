@@ -397,6 +397,12 @@ local function main_button_handler(this, fields, name, tabdata)
 			gamedata.port       = fields["te_serverport"]
 			gamedata.address    = ""
 
+			-- CindrixCraft: the name other devices see in their Multiplayer list
+			local who = gamedata.playername
+			if who and who ~= "" then
+				core.settings:set("lan_server_name", who .. "'s world")
+			end
+
 			core.settings:set("port",gamedata.port)
 			if fields["te_serveraddr"] ~= nil then
 				core.settings:set("bind_address",fields["te_serveraddr"])

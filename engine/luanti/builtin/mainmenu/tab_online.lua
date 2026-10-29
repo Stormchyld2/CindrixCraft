@@ -2,8 +2,22 @@
 -- Copyright (C) 2014 sapier
 -- SPDX-License-Identifier: LGPL-2.1-or-later
 
+-- CindrixCraft: worlds announced on the local network
+local function get_lan_servers()
+	local list = core.get_lan_servers and core.get_lan_servers() or {}
+	for _, s in ipairs(list) do
+		s.is_lan = true
+		s.is_compatible = true
+		s.description = fgettext("A world on your network.") .. "\n" ..
+			fgettext("Game: $1", s.gameid or "?") .. "\n" ..
+			fgettext("Version: $1", s.version or "?")
+	end
+	return list
+end
+
 local function get_sorted_servers()
 	local servers = {
+		lan = get_lan_servers(),
 		fav = {},
 		public = {},
 		incompatible = {}
@@ -74,6 +88,11 @@ end
 local function find_selected_server()
 	local address = core.settings:get("address")
 	local port = tonumber(core.settings:get("remote_port"))
+	for _, server in ipairs(get_lan_servers()) do
+		if server.address == address and server.port == port then
+			return server
+		end
+	end
 	for _, server in ipairs(serverlistmgr.servers) do
 		if server.address == address and server.port == port then
 			return server
@@ -259,11 +278,12 @@ local function get_formspec(tabview, name, tabdata)
 	local servers = get_sorted_servers()
 
 	local dividers = {
+		lan = "6,#44aaff," .. fgettext("On your network") .. ",,,0,0,,",
 		fav = "5,#ffff00," .. fgettext("Favorites") .. ",,,0,0,,",
 		public = "6,#4bdd42," .. fgettext("Public Servers") .. ",,,0,0,,",
 		incompatible = "7,"..mt_color_grey.."," .. fgettext("Incompatible Servers") .. ",,,0,0,,"
 	}
-	local order = {"fav", "public", "incompatible"}
+	local order = {"lan", "fav", "public", "incompatible"}
 
 	tabdata.lookup = {} -- maps row number to server
 	local rows = {}

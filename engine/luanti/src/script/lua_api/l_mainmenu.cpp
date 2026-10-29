@@ -22,6 +22,7 @@
 #include "client/renderingengine.h"
 #include "client/texturepaths.h"
 #include "network/networkprotocol.h"
+#include "network/lan_discovery.h"
 #include "content/mod_configuration.h"
 #include "common/c_converter.h"
 #include "gui/guiOpenURL.h"
@@ -902,6 +903,39 @@ int ModApiMainMenu::l_get_mainmenu_path(lua_State *L)
 }
 
 /******************************************************************************/
+// CindrixCraft: worlds announced on the local network.
+// Starts listening on first use; returns a list of tables.
+int ModApiMainMenu::l_get_lan_servers(lua_State *L)
+{
+	lan::Listener &l = lan::listener();
+	l.start();
+	l.poll();
+
+	std::vector<lan::Entry> servers = l.getServers();
+	lua_createtable(L, servers.size(), 0);
+	int i = 1;
+	for (const lan::Entry &e : servers) {
+		lua_createtable(L, 0, 8);
+		lua_pushstring(L, e.info.name.c_str());
+		lua_setfield(L, -2, "name");
+		lua_pushstring(L, e.address.c_str());
+		lua_setfield(L, -2, "address");
+		lua_pushinteger(L, e.info.port);
+		lua_setfield(L, -2, "port");
+		lua_pushstring(L, e.info.game.c_str());
+		lua_setfield(L, -2, "gameid");
+		lua_pushinteger(L, e.info.players);
+		lua_setfield(L, -2, "clients");
+		lua_pushinteger(L, e.info.max_players);
+		lua_setfield(L, -2, "clients_max");
+		lua_pushstring(L, e.info.version.c_str());
+		lua_setfield(L, -2, "version");
+		lua_rawseti(L, -2, i++);
+	}
+	return 1;
+}
+
+/******************************************************************************/
 int ModApiMainMenu::l_may_modify_path(lua_State *L)
 {
 	const char *target = luaL_checkstring(L, 1);
@@ -1177,6 +1211,7 @@ void ModApiMainMenu::Initialize(lua_State *L, int top)
 	API_FCT(extract_zip);
 	API_FCT(may_modify_path);
 	API_FCT(get_mainmenu_path);
+	API_FCT(get_lan_servers);
 	API_FCT(show_path_select_dialog);
 	API_FCT(download_file);
 	API_FCT(get_language);
