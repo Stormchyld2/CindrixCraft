@@ -56,6 +56,10 @@ return {
 		local credits = get_credits()
 
 		table.insert_all(hypertext, {
+			"<heading>", "CindrixCraft", "</heading>\n",
+			"CindrixCraft is built on the Luanti engine (LGPL-2.1 or later) and the Mineclonia game ",
+			"(code GPLv3 or later, media CC BY-SA 4.0). Thank you to everyone credited below, ",
+			"and to the Mineclonia team (see the credits inside the game).\n\n",
 			"<heading>", fgettext_ne("Core Developers"), "</heading>\n",
 		})
 		prepare_credits(hypertext, credits.core_developers)

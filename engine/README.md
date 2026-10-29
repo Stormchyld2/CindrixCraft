@@ -23,8 +23,11 @@
 - The internal translation domain stays `luanti`, so upstream translations keep working (`src/gettext.cpp`, `src/CMakeLists.txt`, `cmake/Modules/FindGettextLib.cmake`).
 - Windows build: `.github/workflows/windows-engine.yml` at the repo root builds a 64-bit zip on GitHub (this environment has no cross-compiler).
 
+- Main menu (`builtin/mainmenu/`): CindrixCraft is always the selected game, the game picker bar is hidden when only one game is installed, the tabs are named Play and Multiplayer, and the About tab and the "no game found" message mention CindrixCraft, Luanti and Mineclonia.
+- The Windows build now bundles `games/cindrixcraft` and removes the `devtest` test game, so the zip runs with no setup.
+
 ## Planned changes
 
-1. Text in menus and the about tab that still says Luanti (`builtin/mainmenu/`). These are translated strings, so each change needs care.
+1. Remaining menu text that still says Luanti (some dialogs and translated strings).
 2. Android: own app ID, name, icon and signing key.
 3. Optional: start straight into the CindrixCraft game.

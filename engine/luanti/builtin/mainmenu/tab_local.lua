@@ -18,6 +18,12 @@ local current_port = core.settings:get("port")
 function current_game()
 	local gameid = core.settings:get("menu_last_game")
 	local game = gameid and pkgmgr.find_by_gameid(gameid)
+	-- CindrixCraft: always prefer our own game when it is installed.
+	local cindrix = pkgmgr.find_by_gameid("cindrixcraft")
+	if cindrix then
+		core.settings:set("menu_last_game", "cindrixcraft")
+		return cindrix
+	end
 	-- Fall back to first game installed if one exists.
 	if not game and #pkgmgr.games > 0 then
 
@@ -67,6 +73,11 @@ function singleplayer_refresh_gamebar()
 
 	-- Hide gamebar if no games are installed
 	if #pkgmgr.games == 0 then
+		return false
+	end
+
+	-- CindrixCraft: with a single game there is nothing to pick.
+	if #pkgmgr.games == 1 then
 		return false
 	end
 
@@ -153,9 +164,8 @@ local function get_formspec(tabview, name, tabdata)
 		local H = tabview.height
 
 		local hypertext = "<global valign=middle halign=center size=18>" ..
-				fgettext_ne("Luanti is a game-creation platform that allows you to play many different games.") .. "\n" ..
-				fgettext_ne("Luanti doesn't come with a game by default.") .. " " ..
-				fgettext_ne("You need to install a game before you can create a world.")
+				fgettext_ne("The CindrixCraft game files were not found.") .. "\n" ..
+				fgettext_ne("Make sure the games folder next to the program contains the cindrixcraft folder.")
 
 		local button_y = H * 2/3 - 0.6
 		return table.concat({
@@ -469,7 +479,7 @@ end
 --------------------------------------------------------------------------------
 return {
 	name = "local",
-	caption = fgettext("Start Game"),
+	caption = fgettext("Play"),
 	cbf_formspec = get_formspec,
 	cbf_button_handler = main_button_handler,
 	on_change = on_change
