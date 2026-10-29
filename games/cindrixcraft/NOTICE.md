@@ -9,7 +9,7 @@ Changes made for CindrixCraft:
 
 - `game.conf`: title and description, plus `aliases = mineclonia` so worlds made with stock Mineclonia open as CindrixCraft worlds.
 - `menu/header.png`, `menu/icon.png`: replaced with the CindrixCraft logo.
-- `mods/CINDRIX/`: new modpack with CindrixCraft's own mods (`cindrix_core`, `cindrix_commands`).
+- `mods/CINDRIX/`: new modpack with CindrixCraft's own mods (`cindrix_core`, `cindrix_commands`, `cindrix_players`, `cindrix_perms`).
 - `minetest.conf`: `default_privs` also gives new players the `cindrix_commands` privilege.
 - `mods/MISC/mcl_commands/version.lua`: the `/version` command says CindrixCraft.
 

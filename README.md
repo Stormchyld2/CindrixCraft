@@ -26,6 +26,7 @@ CindrixCraft is built on [Luanti](https://www.luanti.org/) (formerly Minetest), 
 
 ## Docs
 
+- [Command cheatsheet](docs/commands.md)
 - [Platforms: Windows and Android](docs/platforms.md)
 - [Offline server](docs/offline-server.md)
 - [Writing mods](docs/mod-development.md)
