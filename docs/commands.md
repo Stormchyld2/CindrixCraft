@@ -39,6 +39,8 @@ Needs the `privs` permission. The host always has it.
 | Command | What it does |
 | --- | --- |
 | `/perms` | Open the permissions menu |
+| `/op <player>` | Make a player an operator (the Admin role). Only the host or another operator can do this |
+| `/deop <player>` | Take operator status away (back to the default role) |
 | `/roles` | List the roles and how many players have each |
 | `/role <player>` | Show a player's role |
 | `/role <player> <role>` | Give a player a role |

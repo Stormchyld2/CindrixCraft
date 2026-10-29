@@ -591,4 +591,71 @@ core.register_chatcommand("role", {
 	end,
 })
 
+-- /op and /deop: quick way to make someone an operator (the Admin role)
+local function can_op(name)
+	return is_admin(name) or assignments[name] == "Admin"
+end
+
+core.register_chatcommand("op", {
+	params = "<player>",
+	description = "Make a player an operator (gives them the Admin role)",
+	func = function(name, param)
+		if not can_op(name) then
+			return false, "Only the host or another operator can do this."
+		end
+		local who = param:trim()
+		if who == "" then
+			return false, "Usage: /op <player>"
+		end
+		if not roles or not roles.Admin then
+			return false, "Roles are not ready yet."
+		end
+		if is_admin(who) then
+			return true, who .. " is the host and already has every permission."
+		end
+		if not core.get_auth_handler().get_auth(who) then
+			return false, "Unknown player: " .. who .. ". They need to join once first."
+		end
+		assignments[who] = "Admin"
+		overrides[who] = nil
+		apply(who)
+		save_all()
+		if core.get_player_by_name(who) then
+			core.chat_send_player(who, "You are now an operator.")
+		end
+		return true, who .. " is now an operator."
+	end,
+})
+
+core.register_chatcommand("deop", {
+	params = "<player>",
+	description = "Take operator status away (back to the default role)",
+	func = function(name, param)
+		if not can_op(name) then
+			return false, "Only the host or another operator can do this."
+		end
+		local who = param:trim()
+		if who == "" then
+			return false, "Usage: /deop <player>"
+		end
+		if is_admin(who) then
+			return false, "The host can't be removed as an operator."
+		end
+		if who == name then
+			return false, "You can't remove yourself. Ask the host."
+		end
+		if assignments[who] ~= "Admin" then
+			return false, who .. " is not an operator."
+		end
+		assignments[who] = default_role()
+		overrides[who] = nil
+		apply(who)
+		save_all()
+		if core.get_player_by_name(who) then
+			core.chat_send_player(who, "You are no longer an operator.")
+		end
+		return true, who .. " is no longer an operator."
+	end,
+})
+
 core.log("action", "[" .. modname .. "] loaded")
