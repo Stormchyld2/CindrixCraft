@@ -6,7 +6,8 @@ Locked-in logo design: a voxel cube (3x3x3 small cubes, with four removed at the
 
 | File | What it is |
 | --- | --- |
-| `cube.svg` | Vector master of the voxel cube mark |
+| `cube.svg` | Vector master of the voxel cube mark (dark outline, for the dark ground) |
+| `cube-transparent.svg` | Same mark with no outline: the seams between voxels are see-through hairlines (SVG mask) |
 | `icon-512.png`, `icon-1024.png` | Square icon, cube on the dark ground |
 | `cube-512-transparent.png` | Cube alone on a transparent background |
 | `wordmark-lockup.png` | Full logo with tagline, 1760x1120 (2x of the 880x560 design) |
@@ -16,7 +17,7 @@ Locked-in logo design: a voxel cube (3x3x3 small cubes, with four removed at the
 
 The lockup and header were exported from the design canvas, so they use the exact typeface and spacing described below.
 
-**Transparent versions:** the cube's outlines are the same colour as the dark ground, so removing the background would erase them. In these files the lettering has its background removed with its true colours kept, and the cube is the transparent vector render (`cube.svg`) placed in the same spot. Use them on dark or mid-tone backgrounds: the off-white CINDRIX lettering and the grey tagline fade out on very light backgrounds.
+**Transparent versions:** these have no outline. The cube comes from `cube-transparent.svg`, where the voxel faces keep their colours and the seams between them are cut out as see-through hairlines, so the mark sits on any background without a dark border. The lettering has its background removed with its true colours kept. The off-white CINDRIX lettering and the grey tagline fade out on very light backgrounds, so use these on dark or mid-tone backgrounds.
 
 ## Palette
 
