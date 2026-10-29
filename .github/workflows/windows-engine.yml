@@ -21,6 +21,19 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Catch Lua typos in our own code before they reach a player
+      - name: Check Lua syntax
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lua5.4
+          for f in games/cindrixcraft/mods/CINDRIX/*/*.lua \
+                   engine/luanti/builtin/mainmenu/tab_online.lua \
+                   engine/luanti/builtin/mainmenu/tab_local.lua \
+                   engine/luanti/builtin/mainmenu/tab_about.lua; do
+            echo "checking $f"
+            luac5.4 -p "$f"
+          done
+
       - name: Install compiler
         working-directory: engine/luanti
         run: |
