@@ -72,9 +72,10 @@ jobs:
           test -f games/cindrixcraft/game.conf
           wine bin/cindrixcraft.exe --version
 
+      # archive: false uploads the zip as it is, so the download is one zip, not a zip in a zip
       - uses: actions/upload-artifact@v7
         with:
-          name: cindrixcraft-win64
+          archive: false
           path: artifact/*.zip
           if-no-files-found: error
 
