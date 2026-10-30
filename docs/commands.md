@@ -161,6 +161,25 @@ Checked against the Minecraft Java command list and the part of the EssentialsX 
 - **EssentialsX:** `/nick`, `/mute`, `/hat`, `/speed`, `/vanish`, `/afk`, `/mail`, `/kit`, `/jail`, `/enderchest`, `/workbench`, `/itemdb`, `/tpall`, `/tpo`.
 - Minecraft has no command for flying, healing or home points, so those only exist because of EssentialsX-style commands; we cover the main ones above.
 
+## Accounts and who can join
+
+How accounts work: nobody signs up. The first time a name joins a world with a password, the account is created and locked to that password. These commands let the host set that up in advance and control who can get in.
+
+| Command | What it does | Needs |
+| --- | --- | --- |
+| `/adduser <name> [password] [role]` | Create an account before the person joins. With no password, one is made up and shown only to you, so you can hand it over. The role defaults to Member. The name is added to the whitelist | server |
+| `/users` | List everyone with an account: online, role, and whether they are whitelisted | ban |
+| `/whitelist on` / `off` | Turn the whitelist on or off. The first time you turn it on, everyone who already has an account is added so nobody gets locked out | ban |
+| `/whitelist add <name>` / `remove <name>` | Allow or stop a name. Removing someone kicks them if they are online | ban |
+| `/whitelist list` | Show the names (also `/whitelist` for the status) | ban |
+| `/setpassword <name> <password>` | Change someone's password (built into Luanti; players can also change their own from the pause menu) | password |
+| `/clearpassword <name>` | Remove someone's password (built into Luanti) | password |
+| `/remove_player <name>` | Delete a player's account and saved data for good (built into Luanti, careful) | server |
+
+- The host is never blocked by the whitelist.
+- Passwords typed into a command can end up in the server log. For `/adduser`, leave the password out and use the one it makes up.
+- A player turned away by the whitelist sees "You are not on this server's whitelist."
+
 ## Keeping this up to date
 
 The "added by CindrixCraft" part is written by hand, so update it whenever a command is added. The EssentialsX web page that lists every command would not load for me, so the "not built yet" list for it is partial. The Mineclonia list was generated from the game files for version 0.124.1 (command descriptions shortened); `/help` in the game is always the final word on what your permissions allow.

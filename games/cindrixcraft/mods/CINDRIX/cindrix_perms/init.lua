@@ -668,4 +668,26 @@ core.register_chatcommand("deop", {
 	end,
 })
 
+-- API used by cindrix_access (/adduser)
+function cindrix_perms.has_role(role_name)
+	return roles ~= nil and roles[role_name] ~= nil
+end
+
+function cindrix_perms.default_role()
+	return default_role()
+end
+
+-- Gives a player a role (their own custom changes are cleared). nil = default role.
+function cindrix_perms.set_role(who, role_name)
+	if not roles then return false, "roles are not ready yet" end
+	role_name = role_name or default_role()
+	if not roles[role_name] then return false, "no role called " .. role_name end
+	if is_admin(who) then return false, "the host always has every permission" end
+	assignments[who] = role_name
+	overrides[who] = nil
+	apply(who)
+	save_all()
+	return true
+end
+
 core.log("action", "[" .. modname .. "] loaded")
