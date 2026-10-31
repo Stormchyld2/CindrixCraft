@@ -102,9 +102,8 @@ wait_for() {
 # ---------------------------------------------------------------------------------------
 
 rm -rf "$work"
-mkdir -p "$work/server-user/games" "$work/client-user" "$world/worldmods"
+mkdir -p "$work/server-user" "$work/client-user" "$world/worldmods"
 
-cp -a "$repo/games/cindrixcraft" "$work/server-user/games/cindrixcraft"
 cp -a "$here/ci_helper" "$world/worldmods/ci_helper"
 
 # Extra mods kept in mods/ (for example from ContentDB) are loaded too.
@@ -151,8 +150,11 @@ EOF
 # Run it
 # ---------------------------------------------------------------------------------------
 
+# LUANTI_GAME_PATH: a folder that contains game folders. Our game is games/cindrixcraft.
+# (LUANTI_USER_PATH is ignored by "run in place" builds such as the one CI makes; those keep
+# their data next to the program instead, which is fine for a throwaway test.)
 echo "Starting the server (this loads the whole game)..."
-LUANTI_USER_PATH="$work/server-user" \
+LUANTI_GAME_PATH="$repo/games" LUANTI_USER_PATH="$work/server-user" \
 	"$exe" --server --config "$work/server.conf" --world "$world" --gameid cindrixcraft \
 	>"$work/server.log" 2>&1 &
 server_pid=$!
@@ -208,6 +210,9 @@ client_pid=""
 # Verdict
 # ---------------------------------------------------------------------------------------
 
+if ! grep -q 'gameid="cindrixcraft"' "$work/server.log"; then
+	fail "the server did not run the CindrixCraft game (see the first lines of the server log)"
+fi
 if [ -f "$world/test_failure" ]; then
 	fail "one or more of our commands or mods had a problem"
 fi

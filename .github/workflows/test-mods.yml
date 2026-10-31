@@ -124,7 +124,7 @@ jobs:
             .smoke-test/*.log
             .smoke-test/*.conf
             .smoke-test/world/test_failure
-            .smoke-test/server-user/debug.txt
+            engine/luanti/debug.txt
           include-hidden-files: true
           if-no-files-found: ignore
 
@@ -136,8 +136,7 @@ jobs:
           tail -n 300 "$RUNNER_TEMP/smoke-output.txt" > "$d/test-output.txt" 2>/dev/null || true
           tail -n 300 .smoke-test/server.log > "$d/server.log" 2>/dev/null || true
           tail -n 150 .smoke-test/client.log > "$d/client.log" 2>/dev/null || true
-          tail -n 200 .smoke-test/server-user/debug.txt > "$d/server-debug.txt" 2>/dev/null || true
-          tail -n 200 .smoke-test/client-user/debug.txt > "$d/client-debug.txt" 2>/dev/null || true
+          tail -n 200 engine/luanti/debug.txt > "$d/debug.txt" 2>/dev/null || true
           cp .smoke-test/world/test_failure "$d/" 2>/dev/null || true
           ls -la .smoke-test > "$d/workdir-listing.txt" 2>&1 || true
           cd "$d"
