@@ -1,0 +1,9 @@
+[ALSOFT] (EE) Could not query RTKit: No such file or directory (2)
+2026-10-31 17:06:07: ACTION[Main]: Connected to 127.0.0.1 (127.0.0.1:30411)
+2026-10-31 17:06:07: ACTION[Main]: CHAT: # Server: version: 5.17.0 | game: Development Test | uptime: 1s | max lag: 0.168s | clients: ci_player
+2026-10-31 17:06:07: ACTION[Main]: CHAT: *** ci_player joined the game.
+2026-10-31 17:06:09: ACTION[Main]: CHAT: This is the "Development Test" [devtest], meant only for testing and development.
+2026-10-31 17:06:22: ACTION[Main]: CHAT: *** Server shutting down in 2s.
+2026-10-31 17:06:23: ACTION[Main]: CHAT: *** Server shutting down in 1s.
+2026-10-31 17:06:24: ACTION[Main]: CHAT: *** Server shutting down
+2026-10-31 17:06:25: ERROR[Main]: Access denied. Reason: smoke test finished

@@ -1,0 +1,10 @@
+total 36
+drwxr-xr-x  5 runner runner 4096 Oct 31 17:06 .
+drwxr-xr-x 14 runner runner 4096 Oct 31 17:06 ..
+drwxr-xr-x  2 runner runner 4096 Oct 31 17:06 client-user
+-rw-r--r--  1 runner runner  144 Oct 31 17:06 client.conf
+-rw-r--r--  1 runner runner  771 Oct 31 17:06 client.log
+drwxr-xr-x  3 runner runner 4096 Oct 31 17:06 server-user
+-rw-r--r--  1 runner runner  307 Oct 31 17:06 server.conf
+-rw-r--r--  1 runner runner 1544 Oct 31 17:06 server.log
+drwxr-xr-x  3 runner runner 4096 Oct 31 17:06 world

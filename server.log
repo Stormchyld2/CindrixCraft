@@ -1,0 +1,25 @@
+2026-10-31 17:06:06: ERROR[Main]: Game "cindrixcraft" not found
+2026-10-31 17:06:06: ACTION[Main]: [log] modname="log"
+2026-10-31 17:06:06: ACTION[Main]: [log] modpath="/home/runner/work/CindrixCraft/CindrixCraft/engine/luanti/games/devtest/mods/log"
+2026-10-31 17:06:06: ACTION[Main]: [log] worldpath="/home/runner/work/CindrixCraft/CindrixCraft/.smoke-test/world"
+[ci_helper] FAIL: mod is not loaded: cindrix_access
+[ci_helper] FAIL: mod is not loaded: cindrix_commands
+[ci_helper] FAIL: mod is not loaded: cindrix_core
+[ci_helper] FAIL: mod is not loaded: cindrix_names
+[ci_helper] FAIL: mod is not loaded: cindrix_perms
+[ci_helper] FAIL: mod is not loaded: cindrix_players
+[ci_helper] 36 mods loaded
+2026-10-31 17:06:06: ACTION[Main]: [log] Callback: on_mods_loaded()
+ _                   _   _ 
+| |_   _  __ _ _ __ | |_(_)
+| | | | |/ _` | '_ \| __| |
+| | |_| | (_| | | | | |_| |
+|_|\__,_|\__,_|_| |_|\__|_|  ___ 5.17.0
+2026-10-31 17:06:06: ACTION[Main]: World at [/home/runner/work/CindrixCraft/CindrixCraft/.smoke-test/world]
+2026-10-31 17:06:06: ACTION[Main]: Server for gameid="devtest" listening on 127.0.0.1:30411.
+2026-10-31 17:06:07: ACTION[Server]: [give_initial_stuff] Giving initial stuff to ci_player
+2026-10-31 17:06:07: ACTION[Server]: ci_player [127.0.0.1] joins game. List of players: ci_player
+[ci_helper] test player joined: ci_player
+[ci_helper] FAIL: no chat commands from the cindrix_* mods were found
+[ci_helper] finished with 7 failure(s), stopping the server
+2026-10-31 17:06:24: ACTION[Main]: Server: Shutting down
