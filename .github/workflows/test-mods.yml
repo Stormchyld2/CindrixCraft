@@ -50,6 +50,8 @@ jobs:
     name: Run the game (server + test player)
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    permissions:
+      contents: write   # only to publish the logs of a failed run to the smoke-logs branch
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 600M
@@ -108,7 +110,9 @@ jobs:
           engine/luanti/bin/cindrixcraft --version
 
       - name: Start the game and join it
-        run: bash tests/smoke/run.sh engine/luanti/bin/cindrixcraft
+        run: |
+          set -o pipefail
+          bash tests/smoke/run.sh engine/luanti/bin/cindrixcraft 2>&1 | tee "$RUNNER_TEMP/smoke-output.txt"
 
       # Debug aid: the logs from a failed run, to download from the run's page
       - name: Keep the logs of a failed run
@@ -121,4 +125,25 @@ jobs:
             .smoke-test/*.conf
             .smoke-test/world/test_failure
             .smoke-test/server-user/debug.txt
+          include-hidden-files: true
           if-no-files-found: ignore
+
+      # Same trick as windows-engine.yml: the end of the logs on their own branch, easy to read
+      - name: Publish the end of the logs to the smoke-logs branch
+        if: failure()
+        run: |
+          d=$(mktemp -d)
+          tail -n 300 "$RUNNER_TEMP/smoke-output.txt" > "$d/test-output.txt" 2>/dev/null || true
+          tail -n 300 .smoke-test/server.log > "$d/server.log" 2>/dev/null || true
+          tail -n 150 .smoke-test/client.log > "$d/client.log" 2>/dev/null || true
+          tail -n 200 .smoke-test/server-user/debug.txt > "$d/server-debug.txt" 2>/dev/null || true
+          tail -n 200 .smoke-test/client-user/debug.txt > "$d/client-debug.txt" 2>/dev/null || true
+          cp .smoke-test/world/test_failure "$d/" 2>/dev/null || true
+          ls -la .smoke-test > "$d/workdir-listing.txt" 2>&1 || true
+          cd "$d"
+          git init -q -b smoke-logs
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Smoke test logs for run ${{ github.run_id }}"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" smoke-logs
