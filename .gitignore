@@ -6,6 +6,9 @@ debug.txt
 # Local overrides
 server/local.conf
 
+# Scratch folder of the smoke test (tests/smoke/run.sh)
+.smoke-test/
+
 # OS and editor files
 .DS_Store
 Thumbs.db

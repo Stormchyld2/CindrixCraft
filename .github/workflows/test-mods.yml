@@ -1,0 +1,124 @@
+name: test-mods
+
+# Two checks for our Lua code, run on every push that touches the game, the mods, the engine
+# or the tests:
+#
+#   1. lint:      luacheck reads our mods and catches typos and undefined variables.
+#   2. game-test: builds the real engine for Linux, starts a server with the CindrixCraft game
+#                 and all mods, joins it with a headless test player, runs every command from
+#                 our mods and checks that nothing crashed. See tests/README.md.
+#
+# Nothing is published from here. The Windows download is built by windows-engine.yml.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'games/cindrixcraft/**'
+      - 'mods/**'
+      - 'server/**'
+      - 'tests/**'
+      - 'engine/luanti/**'
+      - '.luacheckrc'
+      - '.github/workflows/test-mods.yml'
+
+permissions:
+  contents: read
+
+# A newer push to the same branch replaces a run that is still going
+concurrency:
+  group: test-mods-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lua lint (luacheck)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      # The exact luacheck release the config was written against, checked by its fingerprint
+      - name: Get luacheck
+        run: |
+          curl -fsSL -o luacheck https://github.com/lunarmodules/luacheck/releases/download/v1.2.0/luacheck
+          echo "d68da17fca0697d9e2fb04201f3884abd259fa558b3a449bccaed47f1390defc  luacheck" | sha256sum -c -
+          chmod +x luacheck
+
+      - name: Check our mods and the test helper
+        run: ./luacheck --config .luacheckrc --no-color games/cindrixcraft/mods/CINDRIX tests
+
+  game-test:
+    name: Run the game (server + test player)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 600M
+      CCACHE_COMPRESS: '1'
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install build tools and libraries
+        working-directory: engine/luanti
+        run: |
+          source ./util/ci/common.sh
+          install_linux_deps clang ccache libluajit-5.1-dev
+
+      # Remembers compiled engine parts between runs, so after the first run a build takes minutes
+      - name: Restore the compiler cache
+        id: ccache
+        uses: actions/cache/restore@v4
+        with:
+          path: .ccache
+          key: ccache-linux-${{ hashFiles('engine/luanti/src/**', 'engine/luanti/irr/**', 'engine/luanti/lib/**', 'engine/luanti/CMakeLists.txt') }}
+          restore-keys: |
+            ccache-linux-
+
+      # Same way upstream Luanti builds for its own multiplayer tests: one program that
+      # can run as client and, with --server, as server
+      - name: Build the engine
+        working-directory: engine/luanti
+        run: ./util/ci/build.sh
+        env:
+          CC: clang
+          CXX: clang++
+          CMAKE_BUILD_TYPE: Release
+          CMAKE_FLAGS: >-
+            -DBUILD_SERVER=0
+            -DBUILD_UNITTESTS=0
+            -DBUILD_BENCHMARKS=0
+            -DENABLE_GETTEXT=0
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
+      - name: Compiler cache statistics
+        run: ccache -s
+
+      # Saved right after the build (not at the very end), so a failing test does not
+      # throw away the compiled engine
+      - name: Save the compiler cache
+        if: steps.ccache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .ccache
+          key: ccache-linux-${{ hashFiles('engine/luanti/src/**', 'engine/luanti/irr/**', 'engine/luanti/lib/**', 'engine/luanti/CMakeLists.txt') }}
+
+      - name: Check that the program starts
+        run: |
+          ls -la engine/luanti/bin
+          engine/luanti/bin/cindrixcraft --version
+
+      - name: Start the game and join it
+        run: bash tests/smoke/run.sh engine/luanti/bin/cindrixcraft
+
+      # Debug aid: the logs from a failed run, to download from the run's page
+      - name: Keep the logs of a failed run
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: smoke-test-logs
+          path: |
+            .smoke-test/*.log
+            .smoke-test/*.conf
+            .smoke-test/world/test_failure
+            .smoke-test/server-user/debug.txt
+          if-no-files-found: ignore
